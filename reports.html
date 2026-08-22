@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MB Production | Reports</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/reports.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<div class="app-shell">
+  <div id="sidebar-mount"></div>
+  <div class="main">
+    <div id="topbar-mount"></div>
+    <div class="page">
+      <div class="page-head">
+        <div><h2>Reports</h2><p>Shift-wise, day-wise and week-wise production reports</p></div>
+      </div>
+
+      <div class="card card-pad">
+        <div class="grid grid-4">
+          <div class="field mb-0">
+            <label>Report Type</label>
+            <select id="f-type">
+              <option value="shift">Single Shift</option>
+              <option value="day">Full Day</option>
+              <option value="week">Full Week</option>
+            </select>
+          </div>
+          <div class="field mb-0"><label id="lbl-from">Date</label><input type="date" id="f-from"></div>
+          <div class="field mb-0" id="to-date-field"><label>To Date</label><input type="date" id="f-to" disabled></div>
+          <div class="field mb-0"><label>Shift</label><select id="f-shift"><option value="">All Shifts</option></select></div>
+          <div class="field mb-0"><label>Line</label><select id="f-line"><option value="">All Lines</option></select></div>
+          <div class="field mb-0"><label>FG Code / Model</label><select id="f-model"><option value="">All Models</option></select></div>
+        </div>
+        <div class="flex gap-10 mt-16" style="flex-wrap:wrap;">
+          <button class="btn btn-primary" id="btn-search">Search</button>
+          <button class="btn btn-outline" id="btn-reset">Reset</button>
+          <span style="flex:1;"></span>
+          <button class="btn btn-success" id="btn-excel">&#128190; Export Excel</button>
+          <button class="btn btn-outline" id="btn-pdf">&#128196; Export PDF</button>
+        </div>
+      </div>
+
+      <div class="card card-pad mt-20" id="summary-card" style="display:none;">
+        <h3 class="section-title" id="summary-title">Summary</h3>
+        <div class="grid grid-4">
+          <div class="yield-card" id="rs-overall"><div class="label">OVERALL YIELD</div><div class="value">0%</div></div>
+          <div class="yield-card" id="rs-top"><div class="label">TOP YIELD</div><div class="value">0%</div></div>
+          <div class="yield-card" id="rs-bottom"><div class="label">BOTTOM YIELD</div><div class="value">0%</div></div>
+          <div class="kpi-card">
+            <div class="kpi-label">Completed Hours</div>
+            <div class="kpi-value" id="rs-completed">0 / 0</div>
+            <div class="kpi-foot" id="rs-issues">0 issues logged</div>
+          </div>
+        </div>
+        <div class="grid grid-4 mt-16">
+          <div><div class="muted" style="font-size:12px;">Total Target</div><div style="font-weight:700;font-size:16px;" id="rs-total-target">0</div></div>
+          <div><div class="muted" style="font-size:12px;">Total Overall Production</div><div style="font-weight:700;font-size:16px;" id="rs-total-overall">0</div></div>
+          <div><div class="muted" style="font-size:12px;">Total Top Production</div><div style="font-weight:700;font-size:16px;" id="rs-total-top">0</div></div>
+          <div><div class="muted" style="font-size:12px;">Total Bottom Production</div><div style="font-weight:700;font-size:16px;" id="rs-total-bottom">0</div></div>
+        </div>
+      </div>
+
+      <div class="card card-pad mt-20">
+        <h3 class="section-title">Hourly Records</h3>
+        <p class="section-sub" id="results-count">No records loaded yet</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Date</th><th>Shift</th><th>Line</th><th>FG Code</th><th>Model</th><th>Time Slot</th><th>Target</th><th>Overall</th><th>Overall Yield</th><th>Top</th><th>Top Yield</th><th>Bottom</th><th>Bottom Yield</th><th>Issues</th></tr></thead>
+            <tbody id="results-body"><tr><td colspan="14" class="empty-state">Choose filters and click Search</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="grid grid-2 mt-20" id="breakdown-row" style="display:none;">
+        <div class="card card-pad">
+          <h3 class="section-title">Line-wise Report</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Line</th><th>Overall Prod.</th><th>Overall Yield</th><th>Top Yield</th><th>Bottom Yield</th></tr></thead>
+              <tbody id="linewise-body"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card card-pad">
+          <h3 class="section-title">Model-wise Report</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>FG Code</th><th>Model</th><th>Overall Prod.</th><th>Overall Yield</th><th>Issues</th></tr></thead>
+              <tbody id="modelwise-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/calculations.js"></script>
+<script src="js/app.js"></script>
+<script src="js/excel-export.js"></script>
+<script src="js/pdf-export.js"></script>
+<script src="js/reports.js"></script>
+</body>
+</html>

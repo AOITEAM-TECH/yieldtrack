@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MB Production | Fault Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<div class="app-shell">
+  <div id="sidebar-mount"></div>
+  <div class="main">
+    <div id="topbar-mount"></div>
+    <div class="page">
+      <div class="page-head">
+        <div><h2>Fault Report</h2><p>All logged production issues, across lines and shifts</p></div>
+      </div>
+
+      <div class="card card-pad">
+        <div class="grid grid-4">
+          <div class="field mb-0"><label>From Date</label><input type="date" id="f-from"></div>
+          <div class="field mb-0"><label>To Date</label><input type="date" id="f-to"></div>
+          <div class="field mb-0"><label>Line</label><select id="f-line"><option value="">All Lines</option></select></div>
+          <div class="field mb-0"><label>Shift</label><select id="f-shift"><option value="">All Shifts</option></select></div>
+        </div>
+        <div class="flex gap-10 mt-16">
+          <button class="btn btn-primary" id="btn-search">Search</button>
+          <button class="btn btn-outline" id="btn-reset">Reset</button>
+        </div>
+      </div>
+
+      <div class="grid grid-4 mt-20">
+        <div class="kpi-card"><div class="kpi-label">Total Faults</div><div class="kpi-value" id="k-total">0</div><div class="kpi-foot">Logged entries</div></div>
+        <div class="kpi-card"><div class="kpi-label">Lines Affected</div><div class="kpi-value" id="k-lines">0</div><div class="kpi-foot">Distinct lines</div></div>
+        <div class="kpi-card"><div class="kpi-label">Most Common Fault</div><div class="kpi-value" id="k-common" style="font-size:16px;">&mdash;</div><div class="kpi-foot">By occurrence</div></div>
+        <div class="kpi-card"><div class="kpi-label">Hours Affected</div><div class="kpi-value" id="k-hours">0</div><div class="kpi-foot">Of total logged hours</div></div>
+      </div>
+
+      <div class="card card-pad mt-20">
+        <h3 class="section-title">Fault Log</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Date</th><th>Shift</th><th>Line</th><th>Model</th><th>Time Slot</th><th>Overall Prod.</th><th>Issue</th></tr></thead>
+            <tbody id="fault-body"><tr><td colspan="7" class="empty-state">Loading&hellip;</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/calculations.js"></script>
+<script src="js/app.js"></script>
+<script src="js/faults.js"></script>
+</body>
+</html>

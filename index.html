@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MB Production | Sign In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="login-screen">
+    <div class="login-card">
+      <div class="brand-icon" style="width:52px;height:52px;font-size:24px;">&#128421;</div>
+      <h1>MB Production</h1>
+      <p class="sub">Motherboard Production &amp; Yield Reporting System</p>
+
+      <div id="login-alert"></div>
+
+      <form id="login-form">
+        <div class="field">
+          <label>Username</label>
+          <input type="text" id="username" placeholder="e.g. admin" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label>PIN</label>
+          <input type="password" id="pin" placeholder="4-digit PIN" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-full" id="login-btn">Sign In</button>
+      </form>
+
+      <p class="login-hint">Default logins &mdash; Admin: <b>admin / 1234</b> &nbsp;|&nbsp; Operator: <b>operator / 1111</b></p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script>
+    // If already signed in, skip straight to the dashboard
+    if (JSON.parse(sessionStorage.getItem('mb_session') || 'null')) {
+      window.location.href = 'dashboard.html';
+    }
+
+    const form = document.getElementById('login-form');
+    const alertBox = document.getElementById('login-alert');
+    const btn = document.getElementById('login-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.innerHTML = '';
+      const username = document.getElementById('username').value.trim();
+      const pin = document.getElementById('pin').value.trim();
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Signing in...';
+
+      const { data, error } = await sb
+        .from('users')
+        .select('id, username, full_name, role, active, pin')
+        .eq('username', username)
+        .maybeSingle();
+
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+
+      if (error || !data || data.pin !== pin || !data.active) {
+        alertBox.innerHTML = '<div class="alert error">Invalid username or PIN. Please try again.</div>';
+        return;
+      }
+
+      sessionStorage.setItem('mb_session', JSON.stringify({
+        id: data.id, username: data.username, full_name: data.full_name, role: data.role
+      }));
+      window.location.href = 'dashboard.html';
+    });
+  </script>
+</body>
+</html>

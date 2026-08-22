@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MB Production | Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<div class="app-shell">
+  <div id="sidebar-mount"></div>
+  <div class="main">
+    <div id="topbar-mount"></div>
+
+    <div class="page">
+      <div class="page-head">
+        <div>
+          <h2>Production Dashboard</h2>
+          <p>Live motherboard production overview</p>
+        </div>
+        <span class="live-badge"><span class="dot"></span> LIVE</span>
+      </div>
+
+      <div class="card card-pad mb-0">
+        <div class="grid grid-4">
+          <div class="field mb-0">
+            <label>Date</label>
+            <input type="date" id="f-date">
+          </div>
+          <div class="field mb-0">
+            <label>Shift</label>
+            <select id="f-shift"><option value="">All Shifts</option></select>
+          </div>
+          <div class="field mb-0">
+            <label>Line</label>
+            <select id="f-line"><option value="">All Lines</option></select>
+          </div>
+          <div class="field mb-0">
+            <label>Model</label>
+            <select id="f-model"><option value="">All Models</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-4 mt-20" id="kpi-row"></div>
+
+      <div class="grid grid-2 mt-20">
+        <div class="card card-pad">
+          <div class="flex-between">
+            <div>
+              <h3 class="section-title">Current Production</h3>
+              <p class="section-sub">Live hourly production</p>
+            </div>
+            <span class="live-badge"><span class="dot"></span> LIVE</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Time</th><th>Line</th><th>Model</th><th>Production</th><th>Top</th><th>Bottom</th></tr></thead>
+              <tbody id="current-production-body"><tr><td colspan="6" class="empty-state">Loading&hellip;</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card card-pad">
+          <h3 class="section-title">Shift Status</h3>
+          <p class="section-sub">Today's shift schedule</p>
+          <div id="shift-status-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+        </div>
+      </div>
+
+      <div class="grid grid-2 mt-20">
+        <div class="card card-pad">
+          <h3 class="section-title">Hourly Yield Trend</h3>
+          <p class="section-sub">Overall yield %, by hour for the selected filters</p>
+          <canvas id="yield-trend-chart" height="180"></canvas>
+        </div>
+        <div class="card card-pad">
+          <h3 class="section-title">Line-wise Overall Production</h3>
+          <p class="section-sub">Quantity produced per line, selected date</p>
+          <canvas id="line-wise-chart" height="180"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="js/supabase.js"></script>
+<script src="js/calculations.js"></script>
+<script src="js/app.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
