@@ -1,0 +1,14 @@
+.shift-row {
+  display: flex; align-items: center; justify-content: space-between;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+.shift-row .shift-chip {
+  width: 34px; height: 34px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: #fff; font-size: 13px;
+  background: var(--navy-800);
+}
+.shift-row.active .shift-chip { background: var(--green-600); }
+.shift-row .shift-name { font-weight: 600; font-size: 13.5px; }
+.shift-row .shift-time { font-size: 11.5px; color: var(--text-400); }

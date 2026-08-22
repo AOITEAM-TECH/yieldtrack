@@ -1,0 +1,4 @@
+#selected-model-bar { margin-top: 4px; border: 1px solid var(--border); }
+.slot-num { color: var(--text-400); font-weight: 600; }
+td .yield-inline { font-weight: 700; }
+.save-timestamp { font-size: 10.5px; color: var(--text-400); display: block; margin-top: 2px; }
